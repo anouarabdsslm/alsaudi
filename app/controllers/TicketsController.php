@@ -19,7 +19,11 @@ class TicketsController extends BaseController {
 		$user = Auth::user();
 		//get the user trips
 		$tickets =$user->ticket;
-		$tickets->tr = $user->trip;
+		if(! empty($tickets)) 
+			$tickets->tr = $user->trip;
+		else
+			$tickets =null;
+		
 
 		//$tickets = User::find($user->id)->with('ticket','trip')->get();
         return View::make('tickets.index')->withUsertickets($tickets);

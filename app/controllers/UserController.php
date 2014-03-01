@@ -62,10 +62,24 @@ class UserController extends \BaseController {
     {
        $user = Auth::user();
         if(!empty($user->id)){
-            return View::make('dashboard.user',compact('user'));
+            return Redirect::to('dashboard/user');
         }
 
         return View::make('account.login');
+    }
+
+    /**
+     * Logout
+     *
+     */
+    public function getLogout()
+    {
+       $user = Auth::user();
+        if(!empty($user->id)){
+            Auth::logout();
+        }
+        return Redirect::to('/');
+
     }
 
     /**
@@ -92,11 +106,36 @@ class UserController extends \BaseController {
         } 
         if (Auth::attempt($input)) {
 
-            $user = Auth::user();
-            return View::make('dashboard.user',compact('user'));
+            return Redirect::to('dashboard/user');
         }
 
         return Redirect::to('account/login');
+
+    }
+
+    public function getDashboard(){
+
+            $user = Auth::user();
+            if(Auth::check()) {
+
+                //recent curent trips for user
+
+                //miles traveled by user
+
+                //credit card detais
+
+
+                $userDetais = User::whereId($user->id)->with('creditcard','trips')->whereHas('trips',function($q){
+                    $q->orderBy('created_at');
+                })->first();
+               
+               if(empty($userDetais)){
+                    $userDetais =$user;
+               }
+                return View::make("dashboard.user",compact('userDetais'));
+            }
+
+            return Redirect::to('/');
 
     }
 

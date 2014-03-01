@@ -84,4 +84,11 @@ Route::group(array('prefix' => 'account'), function(){
 	Route::post('/', 'UserController@postNew');
 	Route::get('login', 'UserController@getLogin');
 	Route::post('login', 'UserController@postLogin');
+	Route::get('/logout', 'UserController@getLogout');
+});
+
+Route::group(array('prefix' => 'dashboard'), function(){
+
+	Route::get('user', 'UserController@getDashboard');
+
 });

@@ -6,7 +6,15 @@
 <div class="content">
   <div class="container">
     <div class="row">
-
+      <span>
+          @if(! empty($errors))
+          <ul>
+            @foreach( $errors as $message )
+              <li>{{ $message }}</li>
+            @endforeach
+          </ul>
+          @endif
+      </span>
       {{Form::open(array('route'=>'trips.store'))}}
         <div class="col-md-4">
             <div class="form-group">
@@ -32,7 +40,7 @@
 
         <div class="col-md-8">
           <h2>SCHEDULE</h2>
-          <p>{{$dt->format('l jS \\of F Y h:i:s A'); }} <br />
+          <p>{{$dt->format('l jS \\of F Y h:i:s A') }} <br />
           From: {{$from}} <br />
           To: {{$to}}<p>  
         </div> <!-- /.col-md-8 -->
@@ -63,7 +71,7 @@
                     {{$duration->h ." H ,".$duration->i ." m"}}
                 </td>
                 <td>South West</td>
-                @foreach ($trip->station as $key => $value) 
+                @foreach ($trip->stations as $key => $value) 
                   <td>{{$value->miles}}</td>
                 @endforeach
                 <td>{{$trip->train->train_name}}</td>

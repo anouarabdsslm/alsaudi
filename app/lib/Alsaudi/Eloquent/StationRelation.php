@@ -14,14 +14,14 @@ class StationRelation extends Eloquent {
 
 
 	//one station belongs to many trips
-	public function trip(){
+	public function trips(){
 		
 		return $this->belongsToMany('Alsaudi\\Eloquent\\TripRelation',
 			'station_trip','station_id','trip_id');
 	}
 
 	//one station belongs to many trains
-	public function train(){
+	public function trains(){
 		
 		return $this->belongsToMany('Alsaudi\\Eloquent\\TrainRelation');
 	}

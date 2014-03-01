@@ -63,22 +63,23 @@ class UserRelation extends Eloquent implements UserInterface, RemindableInterfac
 	* 	@var string
 	*/
 
+	//one user belongs to one trip(that include his/her destination)(one trip has many passengers)
+	public function trips(){
+		return $this->belongsToMany('Alsaudi\\Eloquent\\TripRelation',
+			'trip_user','user_id','trip_id');
+	}
+
 	//one user has one credit card (one credit card belongs to one user only)
 	public function creditcard(){
 		return $this->hasOne('Alsaudi\\Eloquent\\CreditcardRelation');
 	}
 
 	//one user has one ticket (one ticket belongs to one user)
-	public function ticket(){
+	public function tickets(){
 		
 		return $this->hasMany('Alsaudi\\Eloquent\\TicketRelation');
 	}
 
-	//one user belongs to one trip(that include his/her destination)(one trip has many passengers)
-	public function trip(){
-		return $this->belongsToMany('Alsaudi\\Eloquent\\StationRelation',
-			'trip_user','trip_id','user_id');
-	}
 
 
 

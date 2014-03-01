@@ -48,14 +48,15 @@ class TripsController extends BaseController {
 		
 		if ($validation->fails()) {
 			Input::flash();
-			return Redirect::back()->with('error', $validation->messages()->first());
+			return Redirect::back()->with('errors', $validation->messages()->all());
 		}
 
 		$date = explode( '-',$dateToCheck);
 
 		$dt = \Carbon\Carbon::create($date[0], $date[1], $date[2]);
-
-		$trips = Trip::with('train')->whereHas('station',function($q){
+		
+		
+		$trips = Trip::with('train')->whereHas('stations',function($q){
 			$q->where('station_dep', '=', Input::get('from'));
 			$q->where('station_arr', '=', Input::get('to'));
 		})->get();

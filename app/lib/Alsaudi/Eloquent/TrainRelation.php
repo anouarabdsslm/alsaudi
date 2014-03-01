@@ -18,12 +18,12 @@ class TrainRelation extends Eloquent {
 	*/
 
 	//one train has Many  trips
-	public function trip(){
+	public function trips(){
 		return $this->hasMany('Alsaudi\\Eloquent\\TripRelation','train_id');
 	}
 
 	//one train has many stations
-	public function station(){
+	public function stations(){
 		return $this->belongsToMany('Alsaudi\\Eloquent\\StationRelation');
 	}
 

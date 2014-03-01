@@ -7,6 +7,8 @@ class CreditcardRelation extends Eloquent {
 	 * @var string
 	 */
 	protected $table = 'creditcards';
+
+	protected $dates = array('date_exp');
 	
 	protected $guarded = array();
 
