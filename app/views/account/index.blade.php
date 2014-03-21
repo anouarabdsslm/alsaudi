@@ -40,6 +40,11 @@
             </div>  <!-- / .form-group -->
 
             <div class="form-group">
+              <span>Profile Image :</span>
+              <input type="file" class="form-control"  name="profile_image">
+            </div>  <!-- / .form-group -->
+
+            <div class="form-group">
               <input type="submit" class="btn btn-primary" value="Create Account"/>
             </div>  <!-- / .form-group -->
         </div> <!-- /.col-md-4 -->

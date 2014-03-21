@@ -54,26 +54,80 @@ class TrainsController extends BaseController {
         return View::make('trains.edit');
 	}
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
-	}
+  	public function getAdminTrains(){
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-		//
-	}
+        $trains = Train::all();
+        return View::make("dashboard.admin.trains", compact('trains'));
+    }
+
+    public function getAdminEdit($id) {
+
+        $train = Train::find($id);
+
+        return View::make("dashboard.admin.trainEdit", compact('train'));
+    }
+
+    public function getAdminAdd() {
+
+        return View::make("dashboard.admin.addTrain");
+    }
+
+    public function postAdminAdd() {
+
+        $data =array(
+            'train_name'=>Input::get('train_name'),
+        );
+
+        $rules =array(
+            'train_name'=>'required',
+        );
+
+        $validator = Validator::make($data, $rules);
+
+        if($validator->fails()) {
+            Input::flash();
+            return Redirect::back()->withInput()->with('errors', $validator->messages()->all());
+        }
+
+        if (Train::create($data)) {
+            return Redirect::to('admin/dashboard/trains');
+        }
+    }
+
+
+    public function postAdminEdit($id) {
+
+        $train = Train::find($id);
+
+        $data =array(
+            'train_name'=>Input::get('train_name'),
+        );
+
+        $rules =array(
+            'train_name'=>'required',
+        );
+
+        $validator = Validator::make($data, $rules);
+
+        if($validator->fails()) {
+            Input::flash();
+            return Redirect::back()->withInput()->with('errors', $validator->messages()->all());
+        }
+
+        $train->train_name = Input::get('train_name');
+
+        if ($train->save()) {
+            return Redirect::to("admin/dashboard/trains");
+        }
+    }
+
+    public function postDelete($id) {
+
+        $train = Train::find($id);
+
+        if(! empty($train)) $train->delete();
+
+        return Redirect::to('admin/dashboard/trains');
+    }
 
 }

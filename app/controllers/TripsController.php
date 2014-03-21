@@ -67,48 +67,101 @@ class TripsController extends BaseController {
         		->with('dt',$dt);
 	}
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
-	{
+	public function getAdminTrips(){
 
-	}
+        $trips = Trip::all();
+        return View::make("trips.trains", compact('trips'));
+    }
 
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-        return View::make('trips.edit');
-	}
+    public function getAdminEdit($id) {
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
-	}
+        $trip = Trip::find($id);
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-		//
-	}
+        return View::make("trips.edit", compact('trip'));
+    }
+
+    public function getAdminAdd() {
+
+    	$trains = Train::all();
+        return View::make("trips.create",compact('trains'));
+    }
+
+    public function postAdminAdd() {
+
+        $data =array(
+            'depart'=>Input::get('depart'),
+            'arrive'=>Input::get('arrive'),
+            'connection'=>Input::get('connection'),
+            'duration'=>Input::get('duration'),
+            'train_id'=>Input::get('train_id'),
+        );
+
+        $rules =array(
+            'depart'=>'required',
+            'arrive'=>'required',
+            'connection'=>'required',
+            'duration'=>'required',
+            'train_id'=>'required',
+        );
+
+        $validator = Validator::make($data, $rules);
+
+        if($validator->fails()) {
+            Input::flash();
+            return Redirect::back()->withInput()->with('errors', $validator->messages()->all());
+        }
+
+        if (Trip::create($data)) {
+            return Redirect::to('admin/dashboard/trips');
+        }
+    }
+
+
+    public function postAdminEdit($id) {
+
+        $trip = Trip::find($id);
+
+        $data =array(
+            'depart'=>Input::get('depart'),
+            'arrive'=>Input::get('arrive'),
+            'connection'=>Input::get('connection'),
+            'duration'=>Input::get('duration'),
+            'train_id'=>Input::get('train_id'),
+        );
+
+        $rules =array(
+            'depart'=>'required',
+            'arrive'=>'required',
+            'connection'=>'required',
+            'duration'=>'required',
+            'train_id'=>'required',
+        );
+
+        $validator = Validator::make($data, $rules);
+
+        if($validator->fails()) {
+            Input::flash();
+            return Redirect::back()->withInput()->with('errors', $validator->messages()->all());
+        }
+
+        $trip->depart = Input::get('depart');
+        $trip->arrive = Input::get('arrive');
+        $trip->connection = Input::get('connection');
+        $trip->duration = Input::get('duration');
+        $trip->train_id = Input::get('train_id');
+
+        if ($trip->save()) {
+            return Redirect::to("admin/dashboard/trips");
+        }
+    }
+
+    public function postDelete($id) {
+
+        $trip = Trip::find($id);
+
+        if(! empty($trip)) $trip->delete();
+
+        return Redirect::to('admin/dashboard/trips');
+    }
 
 }

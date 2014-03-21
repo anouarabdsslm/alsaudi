@@ -48,6 +48,24 @@ class UserController extends \BaseController {
 			return Redirect::back()->withInput()->with('errors', $validator->messages()->all());
 		}
 
+        $destinationPath = '';
+        $filename        = '';
+
+        if (Input::hasFile('profile_image'))
+        {
+
+                $file            = Input::file('profile_image');
+                $destinationPath = public_path().'assets/img/';
+                $filename        = str_random(6) . '_' . $file->getClientOriginalName();
+                $uploadSuccess   = $file->move($destinationPath, $filename);
+
+                $path = $destinationPath . $filename]);
+
+
+        }
+
+        $data['path'] = $path;
+
 		if (User::create($data)) {
             return Redirect::to('account/login');
         }
@@ -80,6 +98,48 @@ class UserController extends \BaseController {
         }
         return Redirect::to('/');
 
+    }
+
+    public function getEdit($id) {
+
+        $user = User::find($id);
+
+        return View::make("dashboard.userEdit", compact('user'));
+    }
+
+    public function postEdit($id) {
+
+        $user = User::find($id);
+
+        $data =array(
+            'user_name'=>Input::get('user_name'),
+            'first_name'=>Input::get('first_name'),
+            'last_name'=>Input::get('last_name'),
+            'email'=>Input::get('email'),
+        );
+
+        $rules =array(
+            'user_name'=>'required|unique:users',
+            'first_name'=>'required',
+            'last_name'=>'required',
+            'email'=>'required',
+        );
+
+        $validator = Validator::make($data, $rules);
+
+        if($validator->fails()) {
+            Input::flash();
+            return Redirect::back()->withInput()->with('errors', $validator->messages()->all());
+        }
+
+        $user->user_name = Input::get('user_name');
+        $user->first_name = Input::get('first_name');
+        $user->last_name = Input::get('last_name');
+        $user->email = Input::get('email');
+
+        if ($user->save()) {
+            return Redirect::to("dashboard/user");
+        }
     }
 
     /**
@@ -139,4 +199,98 @@ class UserController extends \BaseController {
 
     }
 
+    public function getAdminUsers(){
+
+        $users = User::all();
+        return View::make("dashboard.admin.users", compact('users'));
+    }
+
+    public function getAdminEdit($id) {
+
+        $user = User::find($id);
+
+        return View::make("dashboard.admin.userEdit", compact('user'));
+    }
+
+    public function getAdminAdd() {
+
+        return View::make("dashboard.admin.addUser");
+    }
+
+    public function postAdminAdd() {
+
+        $data =array(
+            'user_name'=>Input::get('user_name'),
+            'first_name'=>Input::get('first_name'),
+            'last_name'=>Input::get('last_name'),
+            'email'=>Input::get('email'),
+            'password'=>Hash::make(Input::get('password')),
+            'is_admin'=>Input::get('role'),
+        );
+
+
+        $rules =array(
+            'user_name'=>'required|unique:users',
+            'first_name'=>'required',
+            'last_name'=>'required',
+            'email'=>'required',
+            'password'=>'required',
+            'is_admin'=>'required',
+        );
+
+        $validator = Validator::make($data, $rules);
+
+        if($validator->fails()) {
+            Input::flash();
+            return Redirect::back()->withInput()->with('errors', $validator->messages()->all());
+        }
+
+        if (User::create($data)) {
+            return Redirect::to('admin/dashboard/users');
+        }
+    }
+
+
+    public function postAdminEdit($id) {
+
+        $user = User::find($id);
+
+        $data =array(
+            'user_name'=>Input::get('user_name'),
+            'first_name'=>Input::get('first_name'),
+            'last_name'=>Input::get('last_name'),
+            'email'=>Input::get('email'),
+        );
+
+        $rules =array(
+            'user_name'=>'required|unique:users',
+            'first_name'=>'required',
+            'last_name'=>'required',
+            'email'=>'required',
+        );
+
+        $validator = Validator::make($data, $rules);
+
+        if($validator->fails()) {
+            Input::flash();
+            return Redirect::back()->withInput()->with('errors', $validator->messages()->all());
+        }
+
+        $user->user_name = Input::get('user_name');
+        $user->first_name = Input::get('first_name');
+        $user->last_name = Input::get('last_name');
+        $user->email = Input::get('email');
+        if ($user->save()) {
+            return Redirect::to("admin/dashboard/users");
+        }
+    }
+
+    public function postDelete($id) {
+
+        $user = User::find($id);
+
+        if(! empty($user)) $user->delete();
+
+        return Redirect::to('admin/dashboard/users');
+    }
 }

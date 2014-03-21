@@ -11,55 +11,82 @@
 |
 */
 
-/** ------------------------------------------
- *  Route model binding
- *  ------------------------------------------
- */
-// Route::model('account', 'User');
-// Route::model('trips', 'Trips');
 
 /** ------------------------------------------
  *  Admin Routes
  *  ------------------------------------------
  */
-// Route::group(array('prefix' => 'admin', 'before' => 'auth'), function()
-// {
+Route::group(array('prefix' => 'admin/dashboard', 'before' => 'auth'), function()
+{
+    //get dashboard
+    Route::get('/', 'adminController@getIndex');
 
-//     # Comment Management
-//     Route::get('comments/{comment}/edit', 'AdminCommentsController@getEdit');
-//     Route::post('comments/{comment}/edit', 'AdminCommentsController@postEdit');
-//     Route::get('comments/{comment}/delete', 'AdminCommentsController@getDelete');
-//     Route::post('comments/{comment}/delete', 'AdminCommentsController@postDelete');
-//     Route::controller('comments', 'AdminCommentsController');
+    # Statios Management
+    Route::get('stations', 'stationsController@getAdminStations');
 
-//     # Blog Management
-//     Route::get('blogs/{post}/show', 'AdminBlogsController@getShow');
-//     Route::get('blogs/{post}/edit', 'AdminBlogsController@getEdit');
-//     Route::post('blogs/{post}/edit', 'AdminBlogsController@postEdit');
-//     Route::get('blogs/{post}/delete', 'AdminBlogsController@getDelete');
-//     Route::post('blogs/{post}/delete', 'AdminBlogsController@postDelete');
-//     Route::controller('blogs', 'AdminBlogsController');
+    Route::get('stations/{id}/edit', 'stationsController@getAdminEdit');
+    Route::post('stations/{id}/edit', 'stationsController@postAdminEdit');
 
-//     # User Management
-//     Route::get('users/{user}/show', 'AdminUsersController@getShow');
-//     Route::get('users/{user}/edit', 'AdminUsersController@getEdit');
-//     Route::post('users/{user}/edit', 'AdminUsersController@postEdit');
-//     Route::get('users/{user}/delete', 'AdminUsersController@getDelete');
-//     Route::post('users/{user}/delete', 'AdminUsersController@postDelete');
-//     Route::controller('users', 'AdminUsersController');
+    Route::get('stations/add', 'stationsController@getAdminAdd');
+    Route::post('stations', 'stationsController@postAdminAdd');
 
-//     # User Role Management
-//     Route::get('roles/{role}/show', 'AdminRolesController@getShow');
-//     Route::get('roles/{role}/edit', 'AdminRolesController@getEdit');
-//     Route::post('roles/{role}/edit', 'AdminRolesController@postEdit');
-//     Route::get('roles/{role}/delete', 'AdminRolesController@getDelete');
-//     Route::post('roles/{role}/delete', 'AdminRolesController@postDelete');
-//     Route::controller('roles', 'AdminRolesController');
+    Route::post('stations/{id}', 'stationsController@postDelete');
 
-//     # Admin Dashboard
-//     Route::controller('/', 'AdminDashboardController');
-// });
 
+    # Users Management
+    Route::get('users', 'UserController@getAdminUsers');
+
+    Route::get('users/{id}/edit', 'UserController@getAdminEdit');
+    Route::post('users/{id}/edit', 'UserController@postAdminEdit');
+
+    Route::get('users/add', 'UserController@getAdminAdd');
+    Route::post('users', 'UserController@postAdminAdd');
+
+    Route::post('users/{id}', 'UserController@postDelete');
+
+
+    # Ticket Management
+    Route::get('tickets', 'TicketsController@getAdminTickets');
+    Route::get('tickets/{id}/edit', 'TicketsController@getAdminEdit');
+    Route::post('tickets/{id}', 'TicketsController@postAdminEdit');
+    Route::post('tickets', 'TicketsController@getAdminAdd');
+    Route::post('tickets/{id}/delete', 'TicketsController@postDelete');
+
+    # Trains Management
+    Route::get('trains', 'TrainsController@getAdminTrains');
+
+    Route::get('trains/{id}/edit', 'TrainsController@getAdminEdit');
+    Route::post('trains/{id}/edit', 'TrainsController@postAdminEdit');
+
+    Route::get('trains/add', 'TrainsController@getAdminAdd');
+    Route::post('trains', 'TrainsController@postAdminAdd');
+
+    Route::post('trains/{id}', 'TrainsController@postDelete');
+
+
+    # Trips Management
+
+    Route::get('trips', 'tripsController@getAdminTrips');
+
+    Route::get('trips/{id}/edit', 'tripsController@getAdminEdit');
+    Route::post('trips/{id}/edit', 'tripsController@postAdminEdit');
+
+    Route::get('trips/add', 'tripsController@getAdminAdd');
+    Route::post('trips', 'tripsController@postAdminAdd');
+
+    Route::post('trips/{id}', 'tripsController@postDelete');
+
+
+});
+
+//AdminAuth
+Route::group(array('prefix' => 'admin'), function()
+{
+    #Admin Auth
+    Route::get('login', 'AdminController@getLogin');
+	Route::post('login', 'AdminController@postLogin');
+	Route::get('logout', 'AdminController@getLogout');
+});
 /** ------------------------------------------
  *  Frontend Routes
  *  ------------------------------------------
@@ -89,6 +116,8 @@ Route::group(array('prefix' => 'account'), function(){
 
 Route::group(array('prefix' => 'dashboard'), function(){
 
-	Route::get('user', 'UserController@getDashboard');
+    Route::get('user', 'UserController@getDashboard');
+    Route::get('user/{id}/edit', 'UserController@getEdit');
+    Route::post('user/{id}/edit', 'UserController@postEdit');
 
 });

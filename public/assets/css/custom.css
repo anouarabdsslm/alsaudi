@@ -173,6 +173,19 @@
     font-weight: 600;
   }
 
+  .header ul ul {
+    margin-top: 0;
+    background: #7f8c8d;
+color: #fff;
+font-size: 16px;
+border:none;
+  }
+
+   .header ul ul a{
+    color: #fff;
+    font-size: 16px
+  }
+
   .footer {
     background: #7f8c8d;
     padding: 16px 0;
@@ -267,4 +280,23 @@ color: #784c21;
   position: absolute;
   bottom: 12px;
   right: 12px;
+}
+
+#deals .content {
+  background: #7f8c8d;
+  height: 600px;
+  margin-bottom: 21px;
+}
+
+#deals .content h1{
+  font-size: 91px;
+  color: #fff;
+  text-align: center;
+  font-weight: 300
+}
+#deals .content h3{
+  font-size: 35px;
+  color: #fff;
+  text-align: center;
+  font-weight: 300
 }

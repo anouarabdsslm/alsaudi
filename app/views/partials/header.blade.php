@@ -19,11 +19,12 @@
               <li> <a href="{{route('tickets.index')}}">Your Ticket</a></li>
             @endif
             @if(Auth::check())
-              <li>
-                  <ul>
+              <li class="dropdown"><a href="#" <a href="#" class="dropdown-toggle" data-toggle="dropdown">Account <span class="caret"></span>
+              </a>
+                  <ul class="dropdown-menu">
+                    <?php $id = Auth::user()->id ?>
                       <li><a href="{{url('dashboard/user')}}">Profile</a></li>
-                      <li><a href="#">Settings</a></li>
-                      <li><a href="#">Update Inf</a></li>
+                      <li><a href='{{url("dashboard/user/$id/edit")}}'>Update Inf</a></li>
                       <li><a href="{{url('account/logout')}}">Sing Out</a></li>
                   </ul> 
               </li>
