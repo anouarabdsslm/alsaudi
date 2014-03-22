@@ -38,6 +38,11 @@
             <div class="form-group">
               <input type="password" class="form-control" placeholder="Confirm Password" name="cfpassword">
             </div>  <!-- / .form-group -->
+            
+            <div class="form-group">
+              <span>Profile Image :</span>
+              <input type="file" class="form-control"  name="profile_image">
+            </div>  <!-- / .form-group -->
 
             <div class="form-group">
               {{Form::select('role',array('user','admin'))}}

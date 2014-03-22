@@ -8,7 +8,12 @@
   <div class="container">
     <div class="row">
       <div class="col-md-push-2 col-md-3">
-        <img src="{{asset('assets/img/user.png')}}" alt="" class="img-circle">
+        @if(! empty($userDetais))
+          <img src='{{asset("assets/img/{$userDetais->path}")}}' alt="" class="img-circle">
+        @else 
+          <img src='{{asset("assets/img/user.png")}}' alt="" class="img-circle">
+        @endif
+
       </div>
       <!-- /.col-md-12 -->
       <div class="col-md-push-2 col-md-4">

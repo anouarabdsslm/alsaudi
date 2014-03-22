@@ -6,7 +6,7 @@
 <div class="content">
   <div class="container">
     <div class="row">
-      {{Form::open(array('url' => "admin/dashboard/trains"))}}
+      {{Form::open(array('url' => "admin/dashboard/trips"))}}
       <span>
           @if(! empty($errors))
           <ul>
@@ -29,9 +29,17 @@
             <div class="form-group">
               <input value="{{Input::old('connection')}}" type="text" class="form-control" placeholder="Connection" name="connection">
             </div>  <!-- / .form-group -->
-            
+
             <div class="form-group">
-              <input value="{{Input::old('duration')}}" type="text" class="form-control" placeholder="Duration" name="duration">
+              <select name="station_id">
+
+                @foreach ($stations as $station)
+                  <option value="{{$station->id}}">
+                    From {{$station->station_dep}} To {{$station->station_arr}}
+                  </option>
+
+                @endforeach
+              </select>
             </div>  <!-- / .form-group -->
 
             <div class="form-group">
@@ -47,7 +55,7 @@
               </select>
             </div>  <!-- / .form-group -->
 
-            </div>  <!-- / .form-group -->
+          </div>  <!-- / .form-group -->
             <div class="form-group">
               <input type="submit" class="btn btn-primary" value="Add"/>
             </div>  <!-- / .form-group -->

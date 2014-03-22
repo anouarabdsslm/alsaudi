@@ -29,10 +29,10 @@
       </div>
       
       
-      <div class="col-md-4" style="margin-top:10px">
+     <!-- <div class="col-md-4" style="margin-top:10px">
           <a href="{{url('admin/dashboard/tickets')}}" class="btn btn-primary">Manage Ticket</a>
-        <!-- feature -->
-      </div>
+        <!-- feature --
+      </div>-->
   </div>
   <!-- /.row -->
 </div>

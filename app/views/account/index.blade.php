@@ -6,7 +6,7 @@
 <div class="content">
   <div class="container">
     <div class="row">
-      {{Form::open(array('url' => 'account'))}}
+      {{Form::open(array('url' => 'account','files'=>true))}}
       <span>
           @if(! empty($errors))
           <ul>

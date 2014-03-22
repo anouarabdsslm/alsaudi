@@ -70,20 +70,24 @@ class TripsController extends BaseController {
 	public function getAdminTrips(){
 
         $trips = Trip::all();
-        return View::make("trips.trains", compact('trips'));
+
+        return View::make("trips.trips", compact('trips'));
     }
 
     public function getAdminEdit($id) {
 
-        $trip = Trip::find($id);
+        $trip = Trip::find($id)->first();
 
-        return View::make("trips.edit", compact('trip'));
+        $stations = Station::all();
+
+        return View::make("trips.edit", compact('trip','stations'));
     }
 
     public function getAdminAdd() {
 
-    	$trains = Train::all();
-        return View::make("trips.create",compact('trains'));
+        $trains = Train::all();
+    	$stations = Station::all();
+        return View::make("trips.create",compact('trains','stations'));
     }
 
     public function postAdminAdd() {
@@ -92,15 +96,14 @@ class TripsController extends BaseController {
             'depart'=>Input::get('depart'),
             'arrive'=>Input::get('arrive'),
             'connection'=>Input::get('connection'),
-            'duration'=>Input::get('duration'),
             'train_id'=>Input::get('train_id'),
         );
 
+		
         $rules =array(
             'depart'=>'required',
             'arrive'=>'required',
             'connection'=>'required',
-            'duration'=>'required',
             'train_id'=>'required',
         );
 
@@ -110,8 +113,16 @@ class TripsController extends BaseController {
             Input::flash();
             return Redirect::back()->withInput()->with('errors', $validator->messages()->all());
         }
+        //add trip and return Id
+        $addedTripId = DB::table('trips')->insertGetId($data);
 
-        if (Trip::create($data)) {
+        if (isset($addedTripId)) {
+
+            DB::table('station_trip')->insert(array(
+                'station_id' => Input::get('station_id'),
+                'trip_id' => $addedTripId,
+            ));
+
             return Redirect::to('admin/dashboard/trips');
         }
     }
@@ -133,7 +144,6 @@ class TripsController extends BaseController {
             'depart'=>'required',
             'arrive'=>'required',
             'connection'=>'required',
-            'duration'=>'required',
             'train_id'=>'required',
         );
 
@@ -147,10 +157,14 @@ class TripsController extends BaseController {
         $trip->depart = Input::get('depart');
         $trip->arrive = Input::get('arrive');
         $trip->connection = Input::get('connection');
-        $trip->duration = Input::get('duration');
         $trip->train_id = Input::get('train_id');
 
+        $stationId =Input::get('station_id');
+
+            $trip->stations()->sync(array($stationId));
+
         if ($trip->save()) {
+
             return Redirect::to("admin/dashboard/trips");
         }
     }
@@ -158,7 +172,7 @@ class TripsController extends BaseController {
     public function postDelete($id) {
 
         $trip = Trip::find($id);
-
+        $trip->stations()->detach(array(Input::get('stationId'),$id));
         if(! empty($trip)) $trip->delete();
 
         return Redirect::to('admin/dashboard/trips');

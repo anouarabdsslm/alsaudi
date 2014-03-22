@@ -6,7 +6,7 @@
 <div class="content">
   <div class="container">
     <div class="row">
-      {{Form::open(array('url' => "admin/dashboard/users/{$user->id}/edit"))}}
+      {{Form::open(array('url' => "admin/dashboard/users/{$user->id}/edit",'files'=>true))}}
       <span>
           @if(! empty($errors))
           <ul>
@@ -35,6 +35,11 @@
             <div class="form-group">
               <span>Email :</span>
               <input value="{{$user->email}}" type="email" class="form-control" placeholder="E-mail" name="email">
+            </div>  <!-- / .form-group -->
+            
+            <div class="form-group">
+              <span>Profile Image :</span>
+              <input type="file" class="form-control"  name="profile_image">
             </div>  <!-- / .form-group -->
 
             <div class="form-group">

@@ -54,7 +54,7 @@ class TrainsController extends BaseController {
         return View::make('trains.edit');
 	}
 
-  	public function getAdminTrains(){
+	public function getAdminTrains(){
 
         $trains = Train::all();
         return View::make("dashboard.admin.trains", compact('trains'));

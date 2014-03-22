@@ -25,6 +25,7 @@ class UserController extends \BaseController {
 	public function postNew()
 	{
 
+
 		$data =array(
 			'user_name'=>Input::get('user_name'),
 			'first_name'=>Input::get('first_name'),
@@ -50,21 +51,24 @@ class UserController extends \BaseController {
 
         $destinationPath = '';
         $filename        = '';
+        $path            = '';
+
 
         if (Input::hasFile('profile_image'))
         {
-
                 $file            = Input::file('profile_image');
-                $destinationPath = public_path().'assets/img/';
+
+                $destinationPath = public_path().'/assets/img/';
+
                 $filename        = str_random(6) . '_' . $file->getClientOriginalName();
+
                 $uploadSuccess   = $file->move($destinationPath, $filename);
 
-                $path = $destinationPath . $filename]);
 
-
+                if($uploadSuccess) $data['path'] = $filename;
+                
         }
-
-        $data['path'] = $path;
+        
 
 		if (User::create($data)) {
             return Redirect::to('account/login');
@@ -131,11 +135,32 @@ class UserController extends \BaseController {
             Input::flash();
             return Redirect::back()->withInput()->with('errors', $validator->messages()->all());
         }
+        
+        $destinationPath = '';
+        $filename        = '';
+        $path            = '';
+
+
+        if (Input::hasFile('profile_image'))
+        {
+                $file            = Input::file('profile_image');
+
+                $destinationPath = public_path().'/assets/img/';
+
+                $filename        = str_random(6) . '_' . $file->getClientOriginalName();
+
+                $uploadSuccess   = $file->move($destinationPath, $filename);
+
+
+                if($uploadSuccess) $path = $filename;
+                
+        }
 
         $user->user_name = Input::get('user_name');
         $user->first_name = Input::get('first_name');
         $user->last_name = Input::get('last_name');
         $user->email = Input::get('email');
+        $user->path = $path;
 
         if ($user->save()) {
             return Redirect::to("dashboard/user");
@@ -245,6 +270,26 @@ class UserController extends \BaseController {
             return Redirect::back()->withInput()->with('errors', $validator->messages()->all());
         }
 
+        $destinationPath = '';
+        $filename        = '';
+        $path            = '';
+
+
+        if (Input::hasFile('profile_image'))
+        {
+                $file            = Input::file('profile_image');
+
+                $destinationPath = public_path().'/assets/img/';
+
+                $filename        = str_random(6) . '_' . $file->getClientOriginalName();
+
+                $uploadSuccess   = $file->move($destinationPath, $filename);
+
+
+                if($uploadSuccess) $data['path'] = $filename;
+                
+        }
+
         if (User::create($data)) {
             return Redirect::to('admin/dashboard/users');
         }
@@ -276,10 +321,31 @@ class UserController extends \BaseController {
             return Redirect::back()->withInput()->with('errors', $validator->messages()->all());
         }
 
+        $destinationPath = '';
+        $filename        = '';
+        $path            = '';
+
+
+        if (Input::hasFile('profile_image'))
+        {
+                $file            = Input::file('profile_image');
+
+                $destinationPath = public_path().'/assets/img/';
+
+                $filename        = str_random(6) . '_' . $file->getClientOriginalName();
+
+                $uploadSuccess   = $file->move($destinationPath, $filename);
+
+
+                if($uploadSuccess) $path = $filename;
+                
+        }
+
         $user->user_name = Input::get('user_name');
         $user->first_name = Input::get('first_name');
         $user->last_name = Input::get('last_name');
         $user->email = Input::get('email');
+        $user->path = $path;
         if ($user->save()) {
             return Redirect::to("admin/dashboard/users");
         }
